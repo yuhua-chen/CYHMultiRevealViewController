@@ -81,7 +81,7 @@ CYHRevealControllerBounds CYHRevealControllerBoundsMake(CGFloat min, CGFloat max
     }
     
     //add gesture
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pop)];
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
     tapGesture.numberOfTapsRequired = 1;
     tapGesture.delegate = self;
     tapGesture.cancelsTouchesInView = NO;
@@ -173,7 +173,6 @@ CYHRevealControllerBounds CYHRevealControllerBoundsMake(CGFloat min, CGFloat max
 {
     if( self.index+1 == self.viewControllers.count || self.isAnimate)
         return;
-    
     
     //push self view on first time
     if( -1 == self.index ) {

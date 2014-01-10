@@ -44,6 +44,7 @@
         
         self.revealViewController = [[CYHMultiRevealViewController alloc] initWithView:self.view
                                                                     andViewControllers:nil];
+        self.revealViewController.direction = CYHRevealDirectionTop;
         
         UIButton *button = (UIButton *)sender;
         [button setTitle:@"Push it!" forState:UIControlStateNormal];

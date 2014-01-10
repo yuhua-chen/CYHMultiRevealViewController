@@ -384,6 +384,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CYHMultiRevealViewController/CYHMultiRevealViewController-Prefix.pch";
 				INFOPLIST_FILE = "CYHMultiRevealViewController/CYHMultiRevealViewController-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -397,6 +398,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CYHMultiRevealViewController/CYHMultiRevealViewController-Prefix.pch";
 				INFOPLIST_FILE = "CYHMultiRevealViewController/CYHMultiRevealViewController-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -463,6 +465,7 @@
 				2706B7A8187F93D500E0EAC7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2706B7A9187F93D500E0EAC7 /* Build configuration list for PBXNativeTarget "CYHMultiRevealViewControllerTests" */ = {
 			isa = XCConfigurationList;
@@ -471,6 +474,7 @@
 				2706B7AB187F93D500E0EAC7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
