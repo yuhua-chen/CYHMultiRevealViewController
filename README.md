@@ -38,7 +38,7 @@ CYHMultiRevealViewController *revealViewController = [[CYHMultiRevealViewControl
 //set up the direction(default is CYHRevealDirectionLeft)
 revealViewController.direction = CYHRevealDirectionTop;
 ```
-simply to use like `push` or `pop`, even push new view controller dynmaically
+simply to use like `push` or `pop`, even push a new view controller dynmaically
 ```objective-c
 //to push next view
 [revealViewController push];
@@ -46,6 +46,7 @@ simply to use like `push` or `pop`, even push new view controller dynmaically
 //to pop out view
 [revealViewController pop];
 
+//to push a new view controller
 UIViewController *newViewController = [[UIViewController alloc] init];
 [revealViewController pushViewController:newViewController];
 
