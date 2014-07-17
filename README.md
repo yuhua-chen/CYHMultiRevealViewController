@@ -9,9 +9,10 @@ Features
 - Easy to use
 - Unlimited view controllers
 - Multi-Directions to slide in
+- Support swipe gestures
 
 Exapmles
-============================
+============================  
 You can set 4 directions for the view controller to slide in.
 
 Direction Left
@@ -54,4 +55,5 @@ UIViewController *newViewController = [[UIViewController alloc] init];
 
 License
 ============================
-MIT
+This project is under MIT License. Please feel free to use.
+Yuhua Chen
