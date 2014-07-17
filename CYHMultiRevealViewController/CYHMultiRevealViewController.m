@@ -79,14 +79,30 @@ CYHRevealControllerBounds CYHRevealControllerBoundsMake(CGFloat min, CGFloat max
         }
 
     }
+	
+	//remove all gestures
+	for (UIGestureRecognizer *gesture in [self.view gestureRecognizers]) {
+		[self.view removeGestureRecognizer:gesture];
+	}
     
-    //add gesture
+    // add tap gesture to dismiss all
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
     tapGesture.numberOfTapsRequired = 1;
     tapGesture.delegate = self;
     tapGesture.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tapGesture];
-    
+	
+	// add swipe gesture to pop
+	UISwipeGestureRecognizer *popGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(pop)];
+	popGesture.numberOfTouchesRequired = 1;
+	popGesture.direction = [self swipeGestureDirectionByReversed:NO];
+    [self.view addGestureRecognizer:popGesture];
+	
+	// add swip gesture to pop
+	UISwipeGestureRecognizer *pushGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(push)];
+	pushGesture.numberOfTouchesRequired = 1;
+	pushGesture.direction = [self swipeGestureDirectionByReversed:YES];
+    [self.view addGestureRecognizer:pushGesture];
 }
 
 - (CGRect)getOriginalFrameWithView:(UIView *)view WithIndex:(NSUInteger)index
@@ -168,6 +184,38 @@ CYHRevealControllerBounds CYHRevealControllerBoundsMake(CGFloat min, CGFloat max
     [self setup];
 }
 
+- (UISwipeGestureRecognizerDirection)swipeGestureDirectionByReversed:(BOOL)reversed
+{
+	CYHRevealDirection direction = self.direction;
+	if (reversed) {
+		switch (direction) {
+			case CYHRevealDirectionLeft:
+				direction = CYHRevealDirectionRight;
+				break;
+			case CYHRevealDirectionRight:
+				direction = CYHRevealDirectionLeft;
+				break;
+			case CYHRevealDirectionTop:
+				direction = CYHRevealDirectionBottom;
+				break;
+			case CYHRevealDirectionBottom:
+				direction= CYHRevealDirectionTop;
+				break;
+		}
+	}
+	
+	switch (direction) {
+		case CYHRevealDirectionTop:
+			return UISwipeGestureRecognizerDirectionUp;
+		case CYHRevealDirectionRight:
+			return UISwipeGestureRecognizerDirectionRight;
+		case CYHRevealDirectionBottom:
+			return UISwipeGestureRecognizerDirectionDown;
+		default:
+			return UISwipeGestureRecognizerDirectionLeft;
+	}
+}
+
 #pragma mark - Method
 - (void)push
 {
@@ -181,21 +229,19 @@ CYHRevealControllerBounds CYHRevealControllerBoundsMake(CGFloat min, CGFloat max
     }
     
     self.isAnimate = YES;
-    [UIView animateKeyframesWithDuration:kAnimationDuration
-                                   delay:0.0f
-                                 options:UIViewKeyframeAnimationOptionCalculationModeLinear
-                              animations:^{
-                                  
-                                  self.view.layer.opacity = 1.0f;
-                                  
-                                  UIViewController *viewController = [self.viewControllers objectAtIndex:self.index+1];
-                                  viewController.view.frame = [self getRevelFrameWithView:viewController.view AndReverse:NO];
-
-                              }
-                              completion:^(BOOL finished) {
-                                  self.index ++;
-                                  self.isAnimate = NO;
-                              }];
+	[UIView animateWithDuration:kAnimationDuration
+						  delay:0.0f
+						options:UIViewAnimationOptionCurveEaseIn
+					 animations:^{
+						 self.view.layer.opacity = 1.0f;
+						 
+						 UIViewController *viewController = [self.viewControllers objectAtIndex:self.index+1];
+						 viewController.view.frame = [self getRevelFrameWithView:viewController.view AndReverse:NO];
+					 }
+					 completion:^(BOOL finished) {
+						 self.index ++;
+						 self.isAnimate = NO;
+					 }];
 }
 
 - (void)pop
@@ -204,22 +250,21 @@ CYHRevealControllerBounds CYHRevealControllerBoundsMake(CGFloat min, CGFloat max
         return;
     
     self.isAnimate = YES;
-    [UIView animateKeyframesWithDuration:kAnimationDuration
-                                   delay:0.0f
-                                 options:UIViewKeyframeAnimationOptionCalculationModeLinear
-                              animations:^{
-                                  
-                                  UIViewController *viewController = [self.viewControllers objectAtIndex:self.index];
-                                  viewController.view.frame = [self getRevelFrameWithView:viewController.view AndReverse:YES];
-                                  
-                              }
-                              completion:^(BOOL finished) {
-                                  self.isAnimate = NO;
-                                  self.index --;
-                                  if ( -1 == self.index ){
-                                      [self dismiss];
-                                  }
-                              }];
+	
+	[UIView animateWithDuration:kAnimationDuration
+						  delay:0.0f
+						options:UIViewAnimationOptionCurveEaseOut
+					 animations:^{
+						 UIViewController *viewController = [self.viewControllers objectAtIndex:self.index];
+						 viewController.view.frame = [self getRevelFrameWithView:viewController.view AndReverse:YES];
+					 }
+					 completion:^(BOOL finished) {
+						 self.isAnimate = NO;
+						 self.index --;
+						 if ( -1 == self.index ){
+							 [self dismiss];
+						 }
+					 }];
 }
 
 - (void)dismiss
@@ -227,17 +272,17 @@ CYHRevealControllerBounds CYHRevealControllerBoundsMake(CGFloat min, CGFloat max
     if ( self.isAnimate )
         return;
     self.isAnimate = YES;
-    
-    [UIView animateKeyframesWithDuration:kAnimationDuration
-                                   delay:0.0f
-                                 options:UIViewKeyframeAnimationOptionCalculationModeLinear
-                              animations:^{
-                                  self.view.layer.opacity = 0.0f;
-                              }
-                              completion:^(BOOL finished) {
-                                  [self reset];
-                                  self.isAnimate = NO;
-                              }];
+	
+	[UIView animateWithDuration:kAnimationDuration
+						  delay:0.0f
+						options:UIViewAnimationOptionCurveEaseOut
+					 animations:^{
+						 self.view.layer.opacity = 0.0f;
+					 }
+					 completion:^(BOOL finished) {
+						 [self reset];
+						 self.isAnimate = NO;
+					 }];
 }
 
 - (void)pushViewController:(UIViewController *)viewController
@@ -277,17 +322,3 @@ CYHRevealControllerBounds CYHRevealControllerBoundsMake(CGFloat min, CGFloat max
     return self.index;
 }
 @end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
